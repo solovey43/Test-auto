@@ -1,0 +1,56 @@
+import time
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
+
+
+driver = webdriver.Chrome()
+driver.maximize_window()
+driver.get("https://demoqa.com/automation-practice-form")
+action = ActionChains(driver)
+
+fname = driver.find_element(By.ID, "firstName")
+lname = driver.find_element(By.ID, "lastName")
+email = driver.find_element(By.ID, "userEmail")
+gender = driver.find_element(By.XPATH, '//label[text()="Male"]').click()
+mobile = driver.find_element(By.ID, "userNumber")
+hobbies = driver.find_element(By.XPATH, '//label[text()="Sports"]').click()
+Current_addres = driver.find_element(By.XPATH, '//textarea[@placeholder="Current Address"]')
+
+time.sleep(2)
+
+action.move_to_element(fname).click(fname).perform()
+fname.send_keys("Rus")
+action.move_to_element(lname).click(lname).perform()
+lname.send_keys("Kas")
+action.move_to_element(email).click(email).perform()
+email.send_keys("123123@mail.com")
+action.move_to_element(mobile).click(mobile).perform()
+mobile.send_keys("9877892332")
+action.move_to_element(Current_addres).click(Current_addres).perform()
+Current_addres.send_keys("State Chelabinskaya oblast, city Magnitogorsk, Str. 50 Let Magnitki")
+
+time.sleep(2)
+
+driver.execute_script("window.scrollBy(0, 200);")
+
+submit_button = driver.find_element(By.ID, "submit")
+submit_button.click()
+
+time.sleep(2)
+
+modal_title = driver.find_element(By.ID, "example-modal-sizes-title-lg")
+assert modal_title.text == "Thanks for submitting the form"
+
+close_button = driver.find_element(By.ID, "closeLargeModal")
+close_button.click()
+
+time.sleep(2)
+
+try:
+    modal = driver.find_element(By.CLASS_NAME, "modal-content")
+    assert not modal.is_displayed()
+except:
+    print("Модальное окно больше не отображается на экране")
+
+driver.quit()
