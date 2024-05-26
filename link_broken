@@ -1,0 +1,39 @@
+import time
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()
+driver.maximize_window()
+driver.get('https://practice-automation.com/broken-links/')
+
+time.sleep(5)
+
+search_link = driver.find_element(By.XPATH, "//a[text()='broken link']")
+search_link.click()
+
+time.sleep(5)
+
+from selenium.common.exceptions import NoSuchElementException
+
+try:
+    text = driver.find_element(By.XPATH, "//p[contains(text(),'we could not find that!')]").text
+    if text == 'we could not find that!':
+        print(True)
+    else:
+        print(False)
+except NoSuchElementException:
+    print(False)
+
+time.sleep(5)
+
+search_link = driver.find_element(By.CSS_SELECTOR, ".btn.wp-block-button__link")
+search_link.click()
+
+time.sleep(5)
+
+if driver.current_url == 'https://practice-automation.com/':
+    print(True)
+else:
+    print(False)
+
+driver.quit()
